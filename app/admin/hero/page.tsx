@@ -83,7 +83,10 @@ export default function HeroAdmin() {
     );
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-5xl mx-auto space-y-8 pb-16">
+    <form
+      onSubmit={handleSubmit}
+      className="w-full max-w-[1600px] space-y-8 pb-16"
+    >
       {/* Sticky Header with Action Button */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md pb-4 pt-4 border-b border-border flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

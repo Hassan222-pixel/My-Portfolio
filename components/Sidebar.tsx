@@ -19,6 +19,7 @@ import {
   User,
   Briefcase,
   Mail,
+  Layers, // <-- Added Layers icon for Categories
 } from "lucide-react";
 
 interface SidebarProps {
@@ -56,6 +57,7 @@ export default function Sidebar({
       items: [
         { name: "Hero Section", path: "/admin/hero", icon: Home },
         { name: "About Me", path: "/admin/about", icon: User },
+        { name: "Categories", path: "/admin/categories", icon: Layers }, // <-- ADDED THIS
         { name: "Skills", path: "/admin/skills", icon: Code2 },
         { name: "Experience", path: "/admin/experience", icon: Briefcase },
         { name: "Projects", path: "/admin/projects", icon: FolderKanban },
@@ -66,7 +68,6 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Mobile Dark Overlay */}
       {isMobileOpen && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity"
@@ -74,25 +75,21 @@ export default function Sidebar({
         />
       )}
 
-      {/* Sidebar Container */}
       <aside
         className={`fixed top-0 left-0 h-screen bg-card border-r border-border flex flex-col z-50 transition-all duration-300 ease-in-out
         ${isCollapsed ? "w-20" : "w-64"} 
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
-        {/* Header Section - FIXED CRAMPING */}
         <div
           className={`h-16 flex items-center border-b border-border shrink-0 transition-all
           ${isCollapsed ? "justify-center" : "justify-between px-4"}`}
         >
-          {/* Only show logo when expanded */}
           {!isCollapsed && (
             <h1 className="text-xl font-bold text-primary tracking-wide whitespace-nowrap">
               Hassan Admin
             </h1>
           )}
 
-          {/* Desktop Toggle Button - Centered when collapsed */}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="hidden md:flex text-textDim hover:text-textMain p-2 rounded-lg hover:bg-background transition-colors"
@@ -105,7 +102,6 @@ export default function Sidebar({
             )}
           </button>
 
-          {/* Mobile Close Button */}
           <button
             className="md:hidden text-textDim hover:text-textMain p-1 rounded-md"
             onClick={() => setIsMobileOpen(false)}
@@ -114,7 +110,6 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* Navigation Links */}
         <nav className="flex-1 px-3 py-4 overflow-y-auto custom-scrollbar">
           {menuGroups.map((group, groupIndex) => (
             <div key={groupIndex} className={`${groupIndex > 0 ? "mt-6" : ""}`}>
@@ -160,30 +155,26 @@ export default function Sidebar({
           ))}
         </nav>
 
-        {/* Footer Actions - FIXED BOXY BUTTONS */}
         <div className="p-3 border-t border-border space-y-1 shrink-0 bg-card">
           <button
             onClick={toggleTheme}
             className={`w-full flex items-center py-2.5 rounded-lg text-sm font-medium transition-all group
             ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"} 
             text-textDim hover:bg-background hover:text-textMain`}
-            title={isCollapsed ? "Toggle Theme" : ""}
           >
             {theme === "dark" ? (
               <Sun
                 size={20}
-                className="shrink-0 text-textDim group-hover:text-yellow-400 transition-colors"
+                className="shrink-0 text-textDim group-hover:text-yellow-400"
               />
             ) : (
               <Moon
                 size={20}
-                className="shrink-0 text-textDim group-hover:text-slate-600 transition-colors"
+                className="shrink-0 text-textDim group-hover:text-slate-600"
               />
             )}
             {!isCollapsed && (
-              <span className="whitespace-nowrap">
-                {theme === "dark" ? "Light Mode" : "Dark Mode"}
-              </span>
+              <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
             )}
           </button>
 
@@ -192,13 +183,12 @@ export default function Sidebar({
             className={`w-full flex items-center py-2.5 rounded-lg text-sm font-medium transition-all group
             ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"} 
             text-textDim hover:bg-danger/10 hover:text-danger`}
-            title={isCollapsed ? "Logout" : ""}
           >
             <LogOut
               size={20}
-              className="shrink-0 text-textDim group-hover:text-danger transition-colors"
+              className="shrink-0 text-textDim group-hover:text-danger"
             />
-            {!isCollapsed && <span className="whitespace-nowrap">Logout</span>}
+            {!isCollapsed && <span>Logout</span>}
           </button>
         </div>
       </aside>
