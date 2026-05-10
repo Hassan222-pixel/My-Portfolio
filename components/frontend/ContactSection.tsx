@@ -3,9 +3,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2 } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  Loader2,
+  CheckCircle2,
+  Download,
+} from "lucide-react";
 
-// --- CUSTOM BRAND ICONS ---
+// --- CUSTOM BRAND ICONS (Since Lucide removed them) ---
 const Github = ({ size = 24, className = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -41,7 +49,7 @@ const Linkedin = ({ size = 24, className = "" }) => (
     <circle cx="4" cy="4" r="2" />
   </svg>
 );
-// --------------------------
+// ------------------------------------------------------
 
 export default function ContactSection({ info }: { info: any }) {
   const [formData, setFormData] = useState({
@@ -99,7 +107,7 @@ export default function ContactSection({ info }: { info: any }) {
       </motion.div>
 
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-        {/* Left Side: Contact Info */}
+        {/* Left Side: Contact Info & CV */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -182,6 +190,23 @@ export default function ContactSection({ info }: { info: any }) {
               </a>
             )}
           </div>
+
+          {/* DOWNLOAD CV BUTTON */}
+          {info?.cvFile && (
+            <div className="pt-8 mt-8 border-t border-border">
+              <a
+                href={info.cvFile}
+                download="Hassan_Awad_CV.pdf"
+                className="inline-flex items-center gap-3 bg-card hover:bg-primary border border-border hover:border-primary text-textMain hover:text-white px-6 py-3.5 rounded-xl font-medium transition-all shadow-sm group w-full sm:w-auto justify-center"
+              >
+                <Download
+                  size={20}
+                  className="text-primary group-hover:text-white transition-colors"
+                />
+                Download Resume / CV
+              </a>
+            </div>
+          )}
         </motion.div>
 
         {/* Right Side: The Form */}

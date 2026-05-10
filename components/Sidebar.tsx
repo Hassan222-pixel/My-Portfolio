@@ -41,29 +41,28 @@ export default function Sidebar({
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
 
-  // State to hold the number of unread messages
   const [unreadCount, setUnreadCount] = useState(0);
 
-  // Fetch unread messages in the background
   useEffect(() => {
     const fetchUnreadCount = async () => {
       try {
         const res = await fetch("/api/messages", { cache: "no-store" });
+        if (!res.ok) return;
+
         const data = await res.json();
-        if (data.success) {
+        if (data.success && Array.isArray(data.data)) {
           const count = data.data.filter((msg: any) => !msg.isRead).length;
           setUnreadCount(count);
         }
-      } catch (error) {
-        console.error("Failed to fetch unread messages");
+      } catch {
+        // Absolutely nothing here. Silent fail.
       }
     };
 
     fetchUnreadCount();
-    // Optional: Refresh the badge count every 15 seconds
     const interval = setInterval(fetchUnreadCount, 15000);
     return () => clearInterval(interval);
-  }, [pathname]); // Re-check whenever the user navigates
+  }, [pathname]);
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
@@ -153,10 +152,7 @@ export default function Sidebar({
                 {group.items.map((item) => {
                   const isActive = pathname === item.path;
                   const Icon = item.icon;
-
-                  // Logic to show the red badge
                   const isMessagesTab = item.name === "Messages";
-                  // Hide the badge if we are currently looking at the Messages page
                   const showBadge =
                     isMessagesTab &&
                     unreadCount > 0 &&
@@ -181,7 +177,6 @@ export default function Sidebar({
                           size={20}
                           className={`shrink-0 ${isActive ? "text-primary" : "text-textDim group-hover:text-primary transition-colors"}`}
                         />
-                        {/* Red Dot Badge when Collapsed */}
                         {showBadge && isCollapsed && (
                           <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-card rounded-full"></span>
                         )}
@@ -190,7 +185,6 @@ export default function Sidebar({
                       {!isCollapsed && (
                         <div className="flex flex-1 items-center justify-between whitespace-nowrap">
                           <span>{item.name}</span>
-                          {/* Number Badge when Expanded */}
                           {showBadge && (
                             <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
                               {unreadCount}
