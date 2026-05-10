@@ -14,6 +14,8 @@ import ExperienceSection from "@/components/frontend/ExperienceSection";
 import EducationSection from "@/components/frontend/EducationSection"; // ADD IMPORT
 import ProjectModel from "@/models/Project";
 import ProjectsSection from "@/components/frontend/ProjectsSection";
+import ContactInfoModel from "@/models/ContactInfo";
+import ContactSection from "@/components/frontend/ContactSection";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -30,6 +32,11 @@ export default async function PortfolioPage() {
   const safeProjectData = projectData
     ? JSON.parse(JSON.stringify(projectData))
     : [];
+  
+  const contactData = await ContactInfoModel.findOne().lean();
+  const safeContactData = contactData
+    ? JSON.parse(JSON.stringify(contactData))
+    : null;
 
   const safeHeroData = heroData ? JSON.parse(JSON.stringify(heroData)) : null;
   const safeAboutData = aboutData
@@ -55,6 +62,7 @@ export default async function PortfolioPage() {
         <ExperienceSection data={safeExperienceData} />
         <EducationSection data={safeEducationData} /> {/* ADD SECTION */}
         <ProjectsSection data={safeProjectData} />
+        <ContactSection info={safeContactData} />
       </main>
     </div>
   );
