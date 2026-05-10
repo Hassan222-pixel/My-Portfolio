@@ -33,7 +33,7 @@ export default async function PortfolioPage() {
   const safeProjectData = projectData
     ? JSON.parse(JSON.stringify(projectData))
     : [];
-  
+
   const contactData = await ContactInfoModel.findOne().lean();
   const safeContactData = contactData
     ? JSON.parse(JSON.stringify(contactData))
@@ -55,16 +55,21 @@ export default async function PortfolioPage() {
 
   return (
     <div className="min-h-screen bg-background text-textMain selection:bg-primary/30 font-sans">
-      <Navbar />
+      <Navbar cvUrl={safeContactData?.cvFile} />
+
+      {/* 🔥 FIXED: Moved HeroSection OUTSIDE the max-width container so its background stretches edge-to-edge seamlessly! */}
+      <HeroSection data={safeHeroData} cvUrl={safeContactData?.cvFile} />
+
+      {/* The rest of the page sections stay safely constrained inside the centered wrapper */}
       <main className="w-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 overflow-hidden flex flex-col gap-8 md:gap-12">
-        <HeroSection data={safeHeroData} />
         <AboutSection data={safeAboutData} />
         <SkillsSection data={safeSkillsData} />
         <ExperienceSection data={safeExperienceData} />
-        <EducationSection data={safeEducationData} /> {/* ADD SECTION */}
+        <EducationSection data={safeEducationData} />
         <ProjectsSection data={safeProjectData} />
         <ContactSection info={safeContactData} />
       </main>
+
       <Footer info={safeContactData} />
     </div>
   );
