@@ -12,6 +12,8 @@ import AboutSection from "@/components/frontend/AboutSection";
 import SkillsSection from "@/components/frontend/SkillsSection";
 import ExperienceSection from "@/components/frontend/ExperienceSection";
 import EducationSection from "@/components/frontend/EducationSection"; // ADD IMPORT
+import ProjectModel from "@/models/Project";
+import ProjectsSection from "@/components/frontend/ProjectsSection";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -24,6 +26,10 @@ export default async function PortfolioPage() {
   const skillsData = await SkillModel.find().sort({ order: 1 }).lean();
   const experienceData = await ExperienceModel.find().sort({ order: 1 }).lean();
   const educationData = await EducationModel.find().sort({ order: 1 }).lean(); // ADD FETCH
+  const projectData = await ProjectModel.find().sort({ order: 1 }).lean();
+  const safeProjectData = projectData
+    ? JSON.parse(JSON.stringify(projectData))
+    : [];
 
   const safeHeroData = heroData ? JSON.parse(JSON.stringify(heroData)) : null;
   const safeAboutData = aboutData
@@ -48,6 +54,7 @@ export default async function PortfolioPage() {
         <SkillsSection data={safeSkillsData} />
         <ExperienceSection data={safeExperienceData} />
         <EducationSection data={safeEducationData} /> {/* ADD SECTION */}
+        <ProjectsSection data={safeProjectData} />
       </main>
     </div>
   );

@@ -1,36 +1,29 @@
-// app/api/projects/route.ts
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Project from "@/models/Project";
+import { revalidatePath } from "next/cache";
 
-// GET: Fetch all projects
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
-    await dbConnect(); // Ensure the DB is connected
-    const projects = await Project.find({}); // Fetch all projects from MongoDB
-    return NextResponse.json(
-      { success: true, data: projects },
-      { status: 200 },
-    );
+    await dbConnect();
+    const projects = await Project.find({}).sort({ order: 1 });
+    return NextResponse.json({ success: true, data: projects });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch projects" },
-      { status: 500 },
-    );
+    return NextResponse.json({ success: false }, { status: 500 });
   }
 }
 
-// POST: Create a new project (Useful for seeding your database initially)
 export async function POST(request: Request) {
   try {
     await dbConnect();
     const body = await request.json();
+    body.order = await Project.countDocuments();
     const project = await Project.create(body);
-    return NextResponse.json({ success: true, data: project }, { status: 201 });
+    revalidatePath("/");
+    return NextResponse.json({ success: true, data: project });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: "Failed to create project" },
-      { status: 400 },
-    );
+    return NextResponse.json({ success: false }, { status: 400 });
   }
 }
