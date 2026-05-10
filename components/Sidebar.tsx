@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "./ThemeProvider";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   FolderKanban,
@@ -20,7 +21,7 @@ import {
   Briefcase,
   Mail,
   Layers,
-  GraduationCap, // <-- Added Layers icon for Categories
+  GraduationCap,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -40,6 +41,30 @@ export default function Sidebar({
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
 
+  // State to hold the number of unread messages
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch unread messages in the background
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const res = await fetch("/api/messages", { cache: "no-store" });
+        const data = await res.json();
+        if (data.success) {
+          const count = data.data.filter((msg: any) => !msg.isRead).length;
+          setUnreadCount(count);
+        }
+      } catch (error) {
+        console.error("Failed to fetch unread messages");
+      }
+    };
+
+    fetchUnreadCount();
+    // Optional: Refresh the badge count every 15 seconds
+    const interval = setInterval(fetchUnreadCount, 15000);
+    return () => clearInterval(interval);
+  }, [pathname]); // Re-check whenever the user navigates
+
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
     router.push("/login");
@@ -58,7 +83,7 @@ export default function Sidebar({
       items: [
         { name: "Hero Section", path: "/admin/hero", icon: Home },
         { name: "About Me", path: "/admin/about", icon: User },
-        { name: "Categories", path: "/admin/categories", icon: Layers }, // <-- ADDED THIS
+        { name: "Categories", path: "/admin/categories", icon: Layers },
         { name: "Skills", path: "/admin/skills", icon: Code2 },
         { name: "Experience", path: "/admin/experience", icon: Briefcase },
         { name: "Education", path: "/admin/education", icon: GraduationCap },
@@ -128,12 +153,21 @@ export default function Sidebar({
                 {group.items.map((item) => {
                   const isActive = pathname === item.path;
                   const Icon = item.icon;
+
+                  // Logic to show the red badge
+                  const isMessagesTab = item.name === "Messages";
+                  // Hide the badge if we are currently looking at the Messages page
+                  const showBadge =
+                    isMessagesTab &&
+                    unreadCount > 0 &&
+                    pathname !== "/admin/messages";
+
                   return (
                     <Link
                       key={item.name}
                       href={item.path}
                       onClick={() => setIsMobileOpen(false)}
-                      className={`flex items-center py-2.5 rounded-lg text-sm font-medium transition-all group
+                      className={`relative flex items-center py-2.5 rounded-lg text-sm font-medium transition-all group
                       ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"} 
                       ${
                         isActive
@@ -142,12 +176,27 @@ export default function Sidebar({
                       }`}
                       title={isCollapsed ? item.name : ""}
                     >
-                      <Icon
-                        size={20}
-                        className={`shrink-0 ${isActive ? "text-primary" : "text-textDim group-hover:text-primary transition-colors"}`}
-                      />
+                      <div className="relative flex items-center justify-center">
+                        <Icon
+                          size={20}
+                          className={`shrink-0 ${isActive ? "text-primary" : "text-textDim group-hover:text-primary transition-colors"}`}
+                        />
+                        {/* Red Dot Badge when Collapsed */}
+                        {showBadge && isCollapsed && (
+                          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-card rounded-full"></span>
+                        )}
+                      </div>
+
                       {!isCollapsed && (
-                        <span className="whitespace-nowrap">{item.name}</span>
+                        <div className="flex flex-1 items-center justify-between whitespace-nowrap">
+                          <span>{item.name}</span>
+                          {/* Number Badge when Expanded */}
+                          {showBadge && (
+                            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                              {unreadCount}
+                            </span>
+                          )}
+                        </div>
                       )}
                     </Link>
                   );
