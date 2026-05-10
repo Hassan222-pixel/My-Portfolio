@@ -19,7 +19,8 @@ import {
   User,
   Briefcase,
   Mail,
-  Layers, // <-- Added Layers icon for Categories
+  Layers,
+  GraduationCap, // <-- Added Layers icon for Categories
 } from "lucide-react";
 
 interface SidebarProps {
@@ -60,6 +61,7 @@ export default function Sidebar({
         { name: "Categories", path: "/admin/categories", icon: Layers }, // <-- ADDED THIS
         { name: "Skills", path: "/admin/skills", icon: Code2 },
         { name: "Experience", path: "/admin/experience", icon: Briefcase },
+        { name: "Education", path: "/admin/education", icon: GraduationCap },
         { name: "Projects", path: "/admin/projects", icon: FolderKanban },
         { name: "Contact Info", path: "/admin/contact", icon: Mail },
       ],
