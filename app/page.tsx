@@ -16,6 +16,7 @@ import ProjectModel from "@/models/Project";
 import ProjectsSection from "@/components/frontend/ProjectsSection";
 import ContactInfoModel from "@/models/ContactInfo";
 import ContactSection from "@/components/frontend/ContactSection";
+import Footer from "@/components/frontend/Footer";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -64,6 +65,7 @@ export default async function PortfolioPage() {
         <ProjectsSection data={safeProjectData} />
         <ContactSection info={safeContactData} />
       </main>
+      <Footer info={safeContactData} />
     </div>
   );
 }
