@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,6 +16,7 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
     { name: "About", href: "#about" },
     { name: "Skills", href: "#skills" },
     { name: "Experience", href: "#experience" },
+    { name: "Education", href: "#education" }, // Added Education
     { name: "Projects", href: "#projects" },
     { name: "Contact", href: "#contact" },
   ];
@@ -26,7 +26,6 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
       setIsScrolled(window.scrollY > 20);
       const sections = navLinks.map((link) => link.href.substring(1));
       const scrollPosition = window.scrollY + 150;
-
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -38,24 +37,13 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
         }
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent background scrolling when mobile menu is open
-  useEffect(() => {
-    if (mobileMenuOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "unset";
-  }, [mobileMenuOpen]);
-
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/80 backdrop-blur-lg border-b border-border/50 py-3 shadow-sm"
-          : "bg-transparent py-5"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/80 backdrop-blur-lg border-b border-border/50 py-3 shadow-sm" : "bg-transparent py-5"}`}
     >
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex items-center justify-between">
         <Link
@@ -68,7 +56,6 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           <ul className="flex items-center gap-6">
             {navLinks.map((link) => (
@@ -88,7 +75,6 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
               </li>
             ))}
           </ul>
-
           <div className="flex items-center gap-4 border-l border-border pl-6">
             <button
               onClick={toggleTheme}
@@ -96,7 +82,6 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
             >
               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-
             {cvUrl && (
               <a
                 href={cvUrl}
@@ -109,7 +94,6 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
           </div>
         </nav>
 
-        {/* Mobile Menu Toggle Button */}
         <button
           className="md:hidden z-50 p-2 text-textMain bg-card border border-border rounded-full"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -118,14 +102,12 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
         </button>
       </div>
 
-      {/* Mobile Navigation Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
             className="absolute top-full left-0 right-0 h-[calc(100vh-70px)] bg-background/95 backdrop-blur-xl border-t border-border flex flex-col md:hidden overflow-y-auto"
           >
             <div className="flex flex-col px-6 py-8 gap-6">
@@ -142,7 +124,6 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
                   </li>
                 ))}
               </ul>
-
               <div className="flex flex-col gap-4 mt-auto pt-8">
                 <button
                   onClick={() => {

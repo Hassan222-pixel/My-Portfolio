@@ -1,6 +1,4 @@
-// components/frontend/EducationSection.tsx
 "use client";
-
 import { motion } from "framer-motion";
 import { GraduationCap, Calendar, MapPin, School } from "lucide-react";
 
@@ -8,27 +6,30 @@ export default function EducationSection({ data }: { data: any[] }) {
   if (!data || data.length === 0) return null;
 
   return (
-    <section id="education" className="py-24 border-t border-border/50">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="flex items-center gap-4 mb-16"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold text-textMain">
-          Education
-        </h2>
-        <div className="h-px flex-1 bg-border"></div>
-      </motion.div>
+    // UPDATED: Added rounded-[2rem] md:rounded-[4rem] to the section itself
+    // and mx-4 to make the rounding visible on the sides
+    <section
+      id="education"
+      className="w-full max-w-[1400px] mx-auto bg-card/20 border border-border/40 py-12 md:py-16 my-12 md:my-20 relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem]"
+    >
+      <div className="absolute top-1/2 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
-      <div className="relative max-w-4xl mx-auto">
-        {/* Subtle background line for the timeline */}
-        <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-border md:-translate-x-1/2"></div>
+      <div className="px-6 sm:px-10 md:px-16 lg:px-20 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center gap-4 mb-10"
+        >
+          <h2 className="text-2xl md:text-3xl font-black text-textMain tracking-tight">
+            Education Path
+          </h2>
+          <div className="h-px flex-1 bg-gradient-to-r from-border/60 to-transparent"></div>
+        </motion.div>
 
-        <div className="space-y-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {data.map((edu, index) => {
-            const isEven = index % 2 === 0;
             const skillsArray = edu.skills
               ? edu.skills.split(",").map((s: string) => s.trim())
               : [];
@@ -36,60 +37,55 @@ export default function EducationSection({ data }: { data: any[] }) {
             return (
               <motion.div
                 key={edu._id}
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`relative flex flex-col md:flex-row items-start md:items-center ${isEven ? "md:flex-row-reverse" : ""}`}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="group bg-background/50 backdrop-blur-sm border border-border/50 p-6 md:p-7 rounded-3xl shadow-xl hover:border-primary/30 transition-all duration-300 relative overflow-hidden"
               >
-                {/* Custom Education Center Icon */}
-                <div className="absolute left-8 md:left-1/2 w-12 h-12 rounded-full bg-background border-4 border-primary flex items-center justify-center md:-translate-x-1/2 z-10 shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)] -translate-x-1/2">
-                  <GraduationCap size={20} className="text-primary" />
-                </div>
-
-                <div
-                  className={`ml-16 md:ml-0 w-full md:w-1/2 ${isEven ? "md:pl-16" : "md:pr-16"}`}
-                >
-                  <div className="bg-card border border-border p-6 md:p-8 rounded-2xl shadow-sm hover:-translate-y-1 transition-transform duration-300">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4">
-                      <h3 className="text-xl md:text-2xl font-bold text-textMain">
-                        {edu.title}
-                      </h3>
-                      <div className="inline-flex items-center gap-2 px-3 py-1 bg-background border border-border text-textDim text-xs font-bold uppercase tracking-wider rounded-lg shrink-0 w-fit">
-                        <Calendar size={14} />
-                        {edu.startDate} -{" "}
-                        {edu.isCurrent ? "Present" : edu.endDate}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-primary mb-5">
-                      <span className="flex items-center gap-1">
-                        <School size={16} /> {edu.organization}
-                      </span>
-                      <span className="text-textDim">•</span>
-                      <span className="flex items-center gap-1 text-textDim">
-                        <MapPin size={16} /> {edu.location}
-                      </span>
-                    </div>
-
-                    <p className="text-textDim text-sm leading-relaxed mb-6">
-                      {edu.description}
-                    </p>
-
-                    {skillsArray.length > 0 && (
-                      <div className="flex flex-wrap gap-2 pt-4 border-t border-border">
-                        {skillsArray.map((skill: string, i: number) => (
-                          <span
-                            key={i}
-                            className="px-3 py-1 bg-primary/5 text-primary border border-primary/10 text-xs font-medium rounded-lg"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                <div className="flex items-start justify-between mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shadow-inner">
+                    <GraduationCap size={20} />
+                  </div>
+                  <div className="px-3 py-1 bg-card/60 border border-border/40 text-textDim text-[9px] font-black uppercase tracking-widest rounded-full flex items-center gap-1.5 shadow-sm">
+                    <Calendar size={12} />
+                    {edu.startDate} — {edu.isCurrent ? "Present" : edu.endDate}
                   </div>
                 </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-xl md:text-2xl font-black text-textMain leading-tight group-hover:text-primary transition-colors italic">
+                    {edu.title}
+                  </h3>
+
+                  <div className="flex flex-col gap-1.5 pb-3">
+                    <div className="flex items-center gap-2 text-primary font-black text-xs uppercase tracking-tight">
+                      <School size={15} />
+                      {edu.organization}
+                    </div>
+                    <div className="flex items-center gap-2 text-textDim font-bold text-xs">
+                      <MapPin size={15} />
+                      {edu.location}
+                    </div>
+                  </div>
+
+                  <p className="text-textDim text-sm leading-relaxed font-medium line-clamp-3">
+                    {edu.description}
+                  </p>
+                </div>
+
+                {skillsArray.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-5 mt-4 border-t border-border/30">
+                    {skillsArray.map((skill: string, i: number) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-primary/5 text-primary border border-primary/10 text-[9px] font-black uppercase rounded-lg"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </motion.div>
             );
           })}
