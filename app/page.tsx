@@ -58,18 +58,17 @@ export default async function PortfolioPage() {
       <HeroSection data={safeHeroData} cvUrl={safeContactData?.cvFile} />
 
       <main className="flex flex-col w-full">
-        {/* All four sections now sit perfectly stacked at the root level */}
+        {/* All these sections now sit perfectly stacked at the exact same width */}
         <AboutSection data={safeAboutData} />
-
         <SkillsSection data={safeSkillsData} />
-
         <ExperienceSection data={safeExperienceData} />
-
         <EducationSection data={safeEducationData} />
 
-        {/* Projects & Contact Container */}
+        {/* 🔥 MOVED OUTSIDE: Now Projects matches the width of the others */}
+        <ProjectsSection data={safeProjectData} />
+
+        {/* Contact Container */}
         <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex flex-col">
-          <ProjectsSection data={safeProjectData} />
           <ContactSection info={safeContactData} />
         </div>
       </main>
