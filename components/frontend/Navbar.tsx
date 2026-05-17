@@ -16,7 +16,7 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
     { name: "About", href: "#about" },
     { name: "Skills", href: "#skills" },
     { name: "Experience", href: "#experience" },
-    { name: "Education", href: "#education" }, // Added Education
+    { name: "Education", href: "#education" },
     { name: "Projects", href: "#projects" },
     { name: "Contact", href: "#contact" },
   ];
@@ -56,6 +56,7 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
           </span>
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           <ul className="flex items-center gap-6">
             {navLinks.map((link) => (
@@ -94,14 +95,24 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
           </div>
         </nav>
 
-        <button
-          className="md:hidden z-50 p-2 text-textMain bg-card border border-border rounded-full"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        {/* FIXED: Mobile Controls (Toggle + Hamburger Menu together) */}
+        <div className="flex md:hidden items-center gap-3 z-50">
+          <button
+            onClick={toggleTheme}
+            className="p-2 text-textMain bg-card border border-border rounded-full shadow-sm hover:text-primary transition-colors"
+          >
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <button
+            className="p-2 text-textMain bg-card border border-border rounded-full shadow-sm"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </div>
 
+      {/* Mobile Navigation Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -110,7 +121,7 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
             exit={{ opacity: 0, y: -20 }}
             className="absolute top-full left-0 right-0 h-[calc(100vh-70px)] bg-background/95 backdrop-blur-xl border-t border-border flex flex-col md:hidden overflow-y-auto"
           >
-            <div className="flex flex-col px-6 py-8 gap-6">
+            <div className="flex flex-col px-6 py-8 gap-6 h-full">
               <ul className="flex flex-col gap-2">
                 {navLinks.map((link) => (
                   <li key={link.name}>
@@ -124,24 +135,7 @@ export default function Navbar({ cvUrl }: { cvUrl?: string }) {
                   </li>
                 ))}
               </ul>
-              <div className="flex flex-col gap-4 mt-auto pt-8">
-                <button
-                  onClick={() => {
-                    toggleTheme();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center justify-center gap-2 bg-card border border-border text-textMain py-4 rounded-xl font-bold w-full"
-                >
-                  {theme === "dark" ? (
-                    <>
-                      <Sun size={20} /> Switch to Light Mode
-                    </>
-                  ) : (
-                    <>
-                      <Moon size={20} /> Switch to Dark Mode
-                    </>
-                  )}
-                </button>
+              <div className="flex flex-col gap-4 mt-auto pb-8">
                 {cvUrl && (
                   <a
                     href={cvUrl}

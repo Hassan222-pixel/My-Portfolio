@@ -6,14 +6,14 @@ export default function EducationSection({ data }: { data: any[] }) {
   if (!data || data.length === 0) return null;
 
   return (
-    // UPDATED: Added rounded-[2rem] md:rounded-[4rem] to the section itself
-    // and mx-4 to make the rounding visible on the sides
+    // STANDARDIZED WRAPPER: Matches About and Experience exactly
     <section
       id="education"
-      className="w-full max-w-[1400px] mx-auto bg-card/20 border border-border/40 py-12 md:py-16 my-12 md:my-20 relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem]"
+      className="w-full max-w-[1400px] mx-auto bg-card/20 border border-border/40 py-12 md:py-16 my-8 relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem]"
     >
       <div className="absolute top-1/2 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none -z-10"></div>
 
+      {/* Standardized Padding */}
       <div className="px-6 sm:px-10 md:px-16 lg:px-20 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -22,7 +22,7 @@ export default function EducationSection({ data }: { data: any[] }) {
           transition={{ duration: 0.5 }}
           className="flex items-center gap-4 mb-10"
         >
-          <h2 className="text-2xl md:text-3xl font-black text-textMain tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-black text-textMain tracking-tight">
             Education Path
           </h2>
           <div className="h-px flex-1 bg-gradient-to-r from-border/60 to-transparent"></div>
@@ -41,13 +41,13 @@ export default function EducationSection({ data }: { data: any[] }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="group bg-background/50 backdrop-blur-sm border border-border/50 p-6 md:p-7 rounded-3xl shadow-xl hover:border-primary/30 transition-all duration-300 relative overflow-hidden"
+                className="group bg-background/80 backdrop-blur-md border border-border/60 p-6 md:p-8 rounded-3xl shadow-xl hover:border-primary/30 transition-all duration-300 relative overflow-hidden"
               >
                 <div className="flex items-start justify-between mb-5">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary shadow-inner">
-                    <GraduationCap size={20} />
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shadow-inner">
+                    <GraduationCap size={24} />
                   </div>
-                  <div className="px-3 py-1 bg-card/60 border border-border/40 text-textDim text-[9px] font-black uppercase tracking-widest rounded-full flex items-center gap-1.5 shadow-sm">
+                  <div className="px-3 py-1.5 bg-background/50 border border-border/40 text-textDim text-[9px] font-black uppercase tracking-widest rounded-full flex items-center gap-1.5 shadow-sm">
                     <Calendar size={12} />
                     {edu.startDate} — {edu.isCurrent ? "Present" : edu.endDate}
                   </div>
@@ -60,12 +60,10 @@ export default function EducationSection({ data }: { data: any[] }) {
 
                   <div className="flex flex-col gap-1.5 pb-3">
                     <div className="flex items-center gap-2 text-primary font-black text-xs uppercase tracking-tight">
-                      <School size={15} />
-                      {edu.organization}
+                      <School size={15} /> {edu.organization}
                     </div>
                     <div className="flex items-center gap-2 text-textDim font-bold text-xs">
-                      <MapPin size={15} />
-                      {edu.location}
+                      <MapPin size={15} /> {edu.location}
                     </div>
                   </div>
 

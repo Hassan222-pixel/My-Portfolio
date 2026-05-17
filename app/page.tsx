@@ -4,15 +4,16 @@ import AboutModel from "@/models/About";
 import SkillModel from "@/models/Skill";
 import ExperienceModel from "@/models/Experience";
 import EducationModel from "@/models/Education";
+import ProjectModel from "@/models/Project";
+import ContactInfoModel from "@/models/ContactInfo";
+
 import Navbar from "@/components/frontend/Navbar";
 import HeroSection from "@/components/frontend/HeroSection";
 import AboutSection from "@/components/frontend/AboutSection";
 import SkillsSection from "@/components/frontend/SkillsSection";
 import ExperienceSection from "@/components/frontend/ExperienceSection";
 import EducationSection from "@/components/frontend/EducationSection";
-import ProjectModel from "@/models/Project";
 import ProjectsSection from "@/components/frontend/ProjectsSection";
-import ContactInfoModel from "@/models/ContactInfo";
 import ContactSection from "@/components/frontend/ContactSection";
 import Footer from "@/components/frontend/Footer";
 
@@ -56,15 +57,21 @@ export default async function PortfolioPage() {
 
       <HeroSection data={safeHeroData} cvUrl={safeContactData?.cvFile} />
 
-      {/* 🔥 MOVED OUTSIDE: AboutSection now stretches 100% edge-to-edge */}
-      <AboutSection data={safeAboutData} />
+      <main className="flex flex-col w-full">
+        {/* All four sections now sit perfectly stacked at the root level */}
+        <AboutSection data={safeAboutData} />
 
-      <main className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 overflow-hidden flex flex-col">
         <SkillsSection data={safeSkillsData} />
+
         <ExperienceSection data={safeExperienceData} />
+
         <EducationSection data={safeEducationData} />
-        <ProjectsSection data={safeProjectData} />
-        <ContactSection info={safeContactData} />
+
+        {/* Projects & Contact Container */}
+        <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex flex-col">
+          <ProjectsSection data={safeProjectData} />
+          <ContactSection info={safeContactData} />
+        </div>
       </main>
 
       <Footer info={safeContactData} />
