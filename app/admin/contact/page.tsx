@@ -1,6 +1,4 @@
-// app/admin/contact/page.tsx
 "use client";
-
 import { useEffect, useState } from "react";
 import {
   Save,
@@ -12,6 +10,7 @@ import {
   MessageSquare,
   FileText,
   Trash2,
+  Type,
 } from "lucide-react";
 
 // --- CUSTOM BRAND ICONS ---
@@ -50,6 +49,25 @@ const Linkedin = ({ size = 24, className = "" }) => (
     <circle cx="4" cy="4" r="2" />
   </svg>
 );
+
+const Instagram = ({ size = 24, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 // --------------------------
 
 export default function ContactAdmin() {
@@ -60,8 +78,11 @@ export default function ContactAdmin() {
     location: "",
     github: "",
     linkedin: "",
+    instagram: "",
+    footerAbout: "",
     cvFile: "",
   });
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
@@ -70,7 +91,6 @@ export default function ContactAdmin() {
     fetch("/api/contact-info")
       .then((res) => res.json())
       .then((data) => {
-        // FIXED: Merge the data so cvFile doesn't get overwritten with undefined
         if (data.success && data.data) {
           setFormData((prev) => ({ ...prev, ...data.data }));
         }
@@ -101,7 +121,6 @@ export default function ContactAdmin() {
       const res = await fetch("/api/contact-info", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // If this payload is too big, Next.js will block it
         body: JSON.stringify(formData),
       });
 
@@ -109,7 +128,6 @@ export default function ContactAdmin() {
         setMessage("Contact info & CV saved!");
         setTimeout(() => setMessage(""), 3000);
       } else {
-        // FIXED: Catch silent payload errors
         alert(
           "Failed to save! If your PDF is too large, try compressing it to under 2MB.",
         );
@@ -138,10 +156,11 @@ export default function ContactAdmin() {
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-md pb-4 pt-4 border-b border-border flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-textMain tracking-tight">
-            Contact Info & CV
+            Contact Info & Settings
           </h1>
           <p className="text-sm text-textDim mt-1">
-            Manage your public contact details, social links, and Resume.
+            Manage your public contact details, social links, footer text, and
+            Resume.
           </p>
         </div>
         <div className="flex items-center gap-4">
@@ -165,86 +184,132 @@ export default function ContactAdmin() {
         </div>
       </div>
 
-      <div className="bg-card border border-border rounded-2xl shadow-sm p-8 space-y-6">
-        <div>
-          <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
-            <MessageSquare size={16} className="text-textDim" /> Subtitle / Hook
-          </label>
-          <textarea
-            name="subtitle"
-            value={formData.subtitle || ""}
-            onChange={handleChange}
-            rows={2}
-            className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none resize-none"
-            placeholder="e.g. Let's work together to build something great."
-          />
-        </div>
+      <div className="bg-card border border-border rounded-2xl shadow-sm p-8 space-y-8">
+        {/* TEXT CONTENT SECTION */}
+        <div className="space-y-6">
+          <h3 className="text-lg font-bold text-textMain border-b border-border pb-2">
+            Website Text
+          </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
-              <Mail size={16} className="text-textDim" /> Email Address
+              <MessageSquare size={16} className="text-textDim" /> Contact
+              Section Subtitle
             </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email || ""}
+            <textarea
+              name="subtitle"
+              value={formData.subtitle || ""}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              rows={2}
+              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none resize-none"
+              placeholder="e.g. Let's work together to build something great."
             />
           </div>
+
           <div>
             <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
-              <Phone size={16} className="text-textDim" /> Phone Number
+              <Type size={16} className="text-textDim" /> Footer About Text
             </label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone || ""}
+            <textarea
+              name="footerAbout"
+              value={formData.footerAbout || ""}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
-              <MapPin size={16} className="text-textDim" /> Location
-            </label>
-            <input
-              type="text"
-              name="location"
-              value={formData.location || ""}
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              rows={3}
+              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none resize-none"
+              placeholder="Building fast, scalable, and visually engaging digital experiences."
             />
           </div>
         </div>
 
-        <hr className="border-border my-4" />
+        {/* CONTACT DETAILS SECTION */}
+        <div className="space-y-6 pt-4">
+          <h3 className="text-lg font-bold text-textMain border-b border-border pb-2">
+            Contact Details
+          </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
-              <Github size={16} className="text-textDim" /> GitHub URL
-            </label>
-            <input
-              type="url"
-              name="github"
-              value={formData.github || ""}
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div>
+              <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
+                <Mail size={16} className="text-textDim" /> Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email || ""}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
+                <Phone size={16} className="text-textDim" /> Phone Number
+              </label>
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone || ""}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
+                <MapPin size={16} className="text-textDim" /> Location
+              </label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location || ""}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              />
+            </div>
           </div>
-          <div>
-            <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
-              <Linkedin size={16} className="text-textDim" /> LinkedIn URL
-            </label>
-            <input
-              type="url"
-              name="linkedin"
-              value={formData.linkedin || ""}
-              onChange={handleChange}
-              className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
-            />
+        </div>
+
+        {/* SOCIAL LINKS SECTION */}
+        <div className="space-y-6 pt-4">
+          <h3 className="text-lg font-bold text-textMain border-b border-border pb-2">
+            Social Links
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
+                <Github size={16} className="text-textDim" /> GitHub URL
+              </label>
+              <input
+                type="url"
+                name="github"
+                value={formData.github || ""}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
+                <Linkedin size={16} className="text-textDim" /> LinkedIn URL
+              </label>
+              <input
+                type="url"
+                name="linkedin"
+                value={formData.linkedin || ""}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-semibold text-textMain mb-2 flex items-center gap-2">
+                <Instagram size={16} className="text-textDim" /> Instagram URL
+              </label>
+              <input
+                type="url"
+                name="instagram"
+                value={formData.instagram || ""}
+                onChange={handleChange}
+                className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none"
+              />
+            </div>
           </div>
         </div>
 
@@ -261,7 +326,6 @@ export default function ContactAdmin() {
               onChange={handleCvChange}
               className="block w-full sm:w-auto text-sm text-textDim file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-blue-600 cursor-pointer transition-colors"
             />
-            {/* Added a visual Remove button to easily clear the CV */}
             {formData.cvFile && (
               <div className="flex items-center gap-3 shrink-0">
                 <span className="text-xs text-emerald-500 font-bold flex items-center gap-1 bg-emerald-500/10 px-3 py-1.5 rounded-full">

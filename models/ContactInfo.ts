@@ -7,6 +7,8 @@ export interface IContactInfo extends Document {
   location: string;
   github: string;
   linkedin: string;
+  instagram: string;
+  footerAbout: string;
   cvFile: string;
 }
 
@@ -21,6 +23,12 @@ const ContactInfoSchema: Schema = new Schema(
     location: { type: String, default: "" },
     github: { type: String, default: "" },
     linkedin: { type: String, default: "" },
+    instagram: { type: String, default: "" },
+    footerAbout: {
+      type: String,
+      default:
+        "Building fast, scalable, and visually engaging digital experiences. Turning complex problems into elegant solutions.",
+    },
     cvFile: { type: String, default: "" },
   },
   { timestamps: true },

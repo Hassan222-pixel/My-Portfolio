@@ -1,10 +1,8 @@
-// components/frontend/Footer.tsx
 "use client";
-
 import Link from "next/link";
 import { ArrowUp, Mail } from "lucide-react";
 
-// --- CUSTOM BRAND ICONS (Reused for consistency) ---
+// --- CUSTOM BRAND ICONS ---
 const Github = ({ size = 20, className = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -40,9 +38,28 @@ const Linkedin = ({ size = 20, className = "" }) => (
     <circle cx="4" cy="4" r="2" />
   </svg>
 );
+
+const Instagram = ({ size = 20, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 // ---------------------------------------------------
 
-export default function Footer({ info }: { info: any }) {
+export default function Footer({ data }: { data: any }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -51,12 +68,10 @@ export default function Footer({ info }: { info: any }) {
 
   return (
     <footer className="w-full bg-card/30 border-t border-border mt-12 relative overflow-hidden">
-      {/* Subtle top glow effect */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
 
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-16 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 items-start">
-          {/* Brand & Hook */}
           <div className="flex flex-col space-y-4">
             <Link
               href="/"
@@ -68,12 +83,11 @@ export default function Footer({ info }: { info: any }) {
               </span>
             </Link>
             <p className="text-sm text-textDim leading-relaxed max-w-xs">
-              Building fast, scalable, and visually engaging digital
-              experiences. Turning complex problems into elegant solutions.
+              {data?.aboutText ||
+                "Building fast, scalable, and visually engaging digital experiences."}
             </p>
           </div>
 
-          {/* Quick Links */}
           <div className="flex flex-col space-y-4 md:items-center">
             <h3 className="text-sm font-semibold text-textMain uppercase tracking-wider">
               Quick Navigate
@@ -105,6 +119,14 @@ export default function Footer({ info }: { info: any }) {
               </li>
               <li>
                 <Link
+                  href="#education"
+                  className="hover:text-primary transition-colors"
+                >
+                  Education
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="#projects"
                   className="hover:text-primary transition-colors"
                 >
@@ -122,15 +144,14 @@ export default function Footer({ info }: { info: any }) {
             </ul>
           </div>
 
-          {/* Socials & Action */}
           <div className="flex flex-col space-y-4 md:items-end">
             <h3 className="text-sm font-semibold text-textMain uppercase tracking-wider">
               Connect
             </h3>
             <div className="flex items-center gap-4">
-              {info?.github && (
+              {data?.github && (
                 <a
-                  href={info.github}
+                  href={data.github}
                   target="_blank"
                   rel="noreferrer"
                   className="p-2 bg-background border border-border rounded-lg text-textDim hover:text-textMain hover:border-textMain transition-all"
@@ -138,9 +159,9 @@ export default function Footer({ info }: { info: any }) {
                   <Github />
                 </a>
               )}
-              {info?.linkedin && (
+              {data?.linkedin && (
                 <a
-                  href={info.linkedin}
+                  href={data.linkedin}
                   target="_blank"
                   rel="noreferrer"
                   className="p-2 bg-background border border-border rounded-lg text-textDim hover:text-[#0A66C2] hover:border-[#0A66C2] transition-all"
@@ -148,9 +169,19 @@ export default function Footer({ info }: { info: any }) {
                   <Linkedin />
                 </a>
               )}
-              {info?.email && (
+              {data?.instagram && (
                 <a
-                  href={`mailto:${info.email}`}
+                  href={data.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 bg-background border border-border rounded-lg text-textDim hover:text-[#E1306C] hover:border-[#E1306C] transition-all"
+                >
+                  <Instagram />
+                </a>
+              )}
+              {data?.email && (
+                <a
+                  href={`mailto:${data.email}`}
                   className="p-2 bg-background border border-border rounded-lg text-textDim hover:text-primary hover:border-primary transition-all"
                 >
                   <Mail size={20} />
@@ -160,16 +191,10 @@ export default function Footer({ info }: { info: any }) {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-xs text-textDim">
-            © {currentYear} Hassan Awad. All rights reserved.
-          </p>
-
-          <p className="text-xs text-textDim flex items-center gap-1">
-            Built with{" "}
-            <span className="text-textMain font-medium">Next.js</span> &{" "}
-            <span className="text-textMain font-medium">Tailwind CSS</span>
+            © {currentYear} {data?.copyrightName || "Hassan Awad"}. All rights
+            reserved.
           </p>
 
           <button

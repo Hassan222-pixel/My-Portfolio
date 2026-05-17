@@ -1,19 +1,9 @@
-// components/frontend/ContactSection.tsx
 "use client";
-
 import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  Loader2,
-  CheckCircle2,
-  Download,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2 } from "lucide-react";
 
-// --- CUSTOM BRAND ICONS (Since Lucide removed them) ---
+// --- CUSTOM BRAND ICONS ---
 const Github = ({ size = 24, className = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -49,6 +39,25 @@ const Linkedin = ({ size = 24, className = "" }) => (
     <circle cx="4" cy="4" r="2" />
   </svg>
 );
+
+const Instagram = ({ size = 24, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
 // ------------------------------------------------------
 
 export default function ContactSection({ info }: { info: any }) {
@@ -58,6 +67,7 @@ export default function ContactSection({ info }: { info: any }) {
     subject: "",
     message: "",
   });
+
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
@@ -65,7 +75,6 @@ export default function ContactSection({ info }: { info: any }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-
     try {
       const res = await fetch("/api/messages", {
         method: "POST",
@@ -107,7 +116,7 @@ export default function ContactSection({ info }: { info: any }) {
       </motion.div>
 
       <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-        {/* Left Side: Contact Info & CV */}
+        {/* Left Side: Contact Info */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -142,6 +151,7 @@ export default function ContactSection({ info }: { info: any }) {
                 </div>
               </a>
             )}
+
             {info?.phone && (
               <div className="flex items-center gap-4 group">
                 <div className="w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
@@ -153,6 +163,7 @@ export default function ContactSection({ info }: { info: any }) {
                 </div>
               </div>
             )}
+
             {info?.location && (
               <div className="flex items-center gap-4 group">
                 <div className="w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
@@ -168,6 +179,7 @@ export default function ContactSection({ info }: { info: any }) {
             )}
           </div>
 
+          {/* Social Links */}
           <div className="pt-6 flex items-center gap-4">
             {info?.github && (
               <a
@@ -189,24 +201,18 @@ export default function ContactSection({ info }: { info: any }) {
                 <Linkedin size={18} />
               </a>
             )}
-          </div>
-
-          {/* DOWNLOAD CV BUTTON */}
-          {info?.cvFile && (
-            <div className="pt-8 mt-8 border-t border-border">
+            {/* ADDED INSTAGRAM BACK HERE */}
+            {info?.instagram && (
               <a
-                href={info.cvFile}
-                download="Hassan_Awad_CV.pdf"
-                className="inline-flex items-center gap-3 bg-card hover:bg-primary border border-border hover:border-primary text-textMain hover:text-white px-6 py-3.5 rounded-xl font-medium transition-all shadow-sm group w-full sm:w-auto justify-center"
+                href={info.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-textMain hover:bg-[#E1306C] hover:text-white hover:border-[#E1306C] transition-all"
               >
-                <Download
-                  size={20}
-                  className="text-primary group-hover:text-white transition-colors"
-                />
-                Download Resume / CV
+                <Instagram size={18} />
               </a>
-            </div>
-          )}
+            )}
+          </div>
         </motion.div>
 
         {/* Right Side: The Form */}
@@ -232,7 +238,7 @@ export default function ContactSection({ info }: { info: any }) {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none transition-all"
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                 />
               </div>
               <div>
@@ -246,7 +252,7 @@ export default function ContactSection({ info }: { info: any }) {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none transition-all"
-                  placeholder="john@example.com"
+                  placeholder="youremail@example.com"
                 />
               </div>
             </div>
@@ -261,7 +267,7 @@ export default function ContactSection({ info }: { info: any }) {
                 value={formData.subject}
                 onChange={handleChange}
                 className="w-full px-4 py-3 bg-background border border-border rounded-xl text-textMain focus:border-primary outline-none transition-all"
-                placeholder="Project Inquiry"
+                placeholder="Your subject"
               />
             </div>
 
@@ -294,6 +300,7 @@ export default function ContactSection({ info }: { info: any }) {
               )}
               {status === "success" ? "Message Sent!" : "Send Message"}
             </button>
+
             {status === "error" && (
               <p className="text-sm text-danger mt-2">
                 Failed to send message. Please try again.

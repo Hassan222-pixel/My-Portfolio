@@ -6,6 +6,7 @@ import ExperienceModel from "@/models/Experience";
 import EducationModel from "@/models/Education";
 import ProjectModel from "@/models/Project";
 import ContactInfoModel from "@/models/ContactInfo";
+import FooterModel from "@/models/Footer";
 
 import Navbar from "@/components/frontend/Navbar";
 import HeroSection from "@/components/frontend/HeroSection";
@@ -30,6 +31,7 @@ export default async function PortfolioPage() {
   const educationData = await EducationModel.find().sort({ order: 1 }).lean();
   const projectData = await ProjectModel.find().sort({ order: 1 }).lean();
   const contactData = await ContactInfoModel.findOne().lean();
+  const footerData = await FooterModel.findOne().lean(); // ADDED THIS
 
   const safeProjectData = projectData
     ? JSON.parse(JSON.stringify(projectData))
@@ -50,6 +52,9 @@ export default async function PortfolioPage() {
   const safeEducationData = educationData
     ? JSON.parse(JSON.stringify(educationData))
     : [];
+  const safeFooterData = footerData
+    ? JSON.parse(JSON.stringify(footerData))
+    : null; // ADDED THIS
 
   return (
     <div className="min-h-screen bg-background text-textMain selection:bg-primary/30 font-sans">
@@ -58,22 +63,19 @@ export default async function PortfolioPage() {
       <HeroSection data={safeHeroData} cvUrl={safeContactData?.cvFile} />
 
       <main className="flex flex-col w-full">
-        {/* All these sections now sit perfectly stacked at the exact same width */}
         <AboutSection data={safeAboutData} />
         <SkillsSection data={safeSkillsData} />
         <ExperienceSection data={safeExperienceData} />
         <EducationSection data={safeEducationData} />
-
-        {/* 🔥 MOVED OUTSIDE: Now Projects matches the width of the others */}
         <ProjectsSection data={safeProjectData} />
 
-        {/* Contact Container */}
         <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex flex-col">
           <ContactSection info={safeContactData} />
         </div>
       </main>
 
-      <Footer info={safeContactData} />
+      {/* Passing separate safeFooterData instead of safeContactData */}
+      <Footer data={safeFooterData} />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 // components/Sidebar.tsx
 "use client";
-
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "./ThemeProvider";
@@ -22,6 +21,7 @@ import {
   Mail,
   Layers,
   GraduationCap,
+  PanelBottom, // ADD THIS
 } from "lucide-react";
 
 interface SidebarProps {
@@ -40,7 +40,6 @@ export default function Sidebar({
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
-
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
@@ -48,17 +47,15 @@ export default function Sidebar({
       try {
         const res = await fetch("/api/messages", { cache: "no-store" });
         if (!res.ok) return;
-
         const data = await res.json();
         if (data.success && Array.isArray(data.data)) {
           const count = data.data.filter((msg: any) => !msg.isRead).length;
           setUnreadCount(count);
         }
       } catch {
-        // Absolutely nothing here. Silent fail.
+        // Silent fail.
       }
     };
-
     fetchUnreadCount();
     const interval = setInterval(fetchUnreadCount, 15000);
     return () => clearInterval(interval);
@@ -88,6 +85,7 @@ export default function Sidebar({
         { name: "Education", path: "/admin/education", icon: GraduationCap },
         { name: "Projects", path: "/admin/projects", icon: FolderKanban },
         { name: "Contact Info", path: "/admin/contact", icon: Mail },
+        { name: "Footer", path: "/admin/footer", icon: PanelBottom }, // ADDED HERE
       ],
     },
   ];
@@ -100,10 +98,9 @@ export default function Sidebar({
           onClick={() => setIsMobileOpen(false)}
         />
       )}
-
       <aside
         className={`fixed top-0 left-0 h-screen bg-card border-r border-border flex flex-col z-50 transition-all duration-300 ease-in-out
-        ${isCollapsed ? "w-20" : "w-64"} 
+        ${isCollapsed ? "w-20" : "w-64"}
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
       >
         <div
@@ -115,7 +112,6 @@ export default function Sidebar({
               Hassan Admin
             </h1>
           )}
-
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="hidden md:flex text-textDim hover:text-textMain p-2 rounded-lg hover:bg-background transition-colors"
@@ -127,7 +123,6 @@ export default function Sidebar({
               <PanelLeftClose size={20} />
             )}
           </button>
-
           <button
             className="md:hidden text-textDim hover:text-textMain p-1 rounded-md"
             onClick={() => setIsMobileOpen(false)}
@@ -147,7 +142,6 @@ export default function Sidebar({
               {isCollapsed && (
                 <div className="w-full border-t border-border my-3 first:hidden"></div>
               )}
-
               <div className="space-y-1">
                 {group.items.map((item) => {
                   const isActive = pathname === item.path;
@@ -164,7 +158,7 @@ export default function Sidebar({
                       href={item.path}
                       onClick={() => setIsMobileOpen(false)}
                       className={`relative flex items-center py-2.5 rounded-lg text-sm font-medium transition-all group
-                      ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"} 
+                      ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"}
                       ${
                         isActive
                           ? "bg-primary/10 text-primary"
@@ -181,7 +175,6 @@ export default function Sidebar({
                           <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-card rounded-full"></span>
                         )}
                       </div>
-
                       {!isCollapsed && (
                         <div className="flex flex-1 items-center justify-between whitespace-nowrap">
                           <span>{item.name}</span>
@@ -204,7 +197,7 @@ export default function Sidebar({
           <button
             onClick={toggleTheme}
             className={`w-full flex items-center py-2.5 rounded-lg text-sm font-medium transition-all group
-            ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"} 
+            ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"}
             text-textDim hover:bg-background hover:text-textMain`}
           >
             {theme === "dark" ? (
@@ -222,11 +215,10 @@ export default function Sidebar({
               <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
             )}
           </button>
-
           <button
             onClick={handleLogout}
             className={`w-full flex items-center py-2.5 rounded-lg text-sm font-medium transition-all group
-            ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"} 
+            ${isCollapsed ? "justify-center px-2" : "px-4 gap-3"}
             text-textDim hover:bg-danger/10 hover:text-danger`}
           >
             <LogOut

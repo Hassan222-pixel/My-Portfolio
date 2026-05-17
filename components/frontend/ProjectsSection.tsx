@@ -89,10 +89,7 @@ export default function ProjectsSection({ data }: { data: any[] }) {
                 Featured Projects
               </h2>
             </div>
-            <p className="text-textDim text-sm font-medium max-w-xs leading-relaxed">
-              A selection of my recent work, showcasing technical solutions and
-              digital experiences.
-            </p>
+            
           </div>
           <div className="mt-8 h-px w-full bg-gradient-to-r from-primary/30 via-border/60 to-transparent" />
         </motion.div>
